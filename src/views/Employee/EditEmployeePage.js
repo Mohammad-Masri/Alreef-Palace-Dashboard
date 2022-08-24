@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import MyLoader from 'src/components/MyLoader';
 import Page from 'src/components/Page';
+import { convertDateToFormatDate } from 'src/helper/moment';
 import { showSuccessSnackbarMessage } from 'src/helper/snackbar';
 import { fetchOneEmployee, updateOneEmployee } from 'src/store/Employee/actions';
 import EmployeeForm from './EmployeeForm';
@@ -23,9 +24,10 @@ const EditEmployeePage = () => {
   const initialValues = {
     name: employee?.name,
     phone_number: employee?.phone_number,
-    birthday: employee?.birthday,
-    joining_date: employee?.joining_date,
+    birthday: convertDateToFormatDate(employee?.birthday),
+    joining_date: convertDateToFormatDate(employee?.joining_date),
     salary: employee?.salary,
+    one_day_vacation_discount: employee?.one_day_vacation_discount,
     position: employee?.position,
     in_working: employee?.in_working,
   };

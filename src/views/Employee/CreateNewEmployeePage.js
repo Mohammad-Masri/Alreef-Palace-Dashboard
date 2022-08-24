@@ -17,6 +17,7 @@ const CreateNewEmployeePage = () => {
     birthday: '',
     joining_date: '',
     salary: '',
+    one_day_vacation_discount: '',
     position: '',
     in_working: true,
   };

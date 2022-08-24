@@ -114,6 +114,24 @@ const AllEmployeesPage = () => {
       },
     },
     {
+      id: 'one_day_vacation_discount',
+      label: 'قيمة خصم الغياب ليوم واحد',
+      minWidth: 200,
+      align: 'center',
+      renderComponent: (employee) => {
+        return (
+          <RowGrid
+            children={
+              <>
+                <Grid item>{STATIC_DATA.DEFAULT_CURRENCY_NAME}</Grid>
+                <Grid item>{employee.one_day_vacation_discount}</Grid>
+              </>
+            }
+          />
+        );
+      },
+    },
+    {
       id: 'position',
       label: 'الوظيفة',
       minWidth: 200,

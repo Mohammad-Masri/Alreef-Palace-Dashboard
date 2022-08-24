@@ -14,8 +14,10 @@ const EmployeeForm = ({ initialValues, onSubmit, isEdit }) => {
     name: Yup.string().required('الاسم مطلوب'),
     phone_number: Yup.string().matches(phoneRegExp, 'لا يبدو انه رقم هاتف صحيح').required('رقم الهاتف مطلوب'),
     salary: Yup.number('الرجاء ادخال رقم').required('الراتب مطلوب'),
+    one_day_vacation_discount: Yup.number('الرجاء ادخال رقم').required('قيمة الخصم مطلوبة'),
     position: Yup.string().required('الوظيفة مطلوبة'),
     birthday: null,
+    joining_date: null,
     // in_working: Yup.boolean().required('حالة العمل مطلوبة'),
   });
 
@@ -81,6 +83,21 @@ const EmployeeForm = ({ initialValues, onSubmit, isEdit }) => {
               onChange={formik.handleChange}
               error={formik.touched.salary && Boolean(formik.errors.salary)}
               helperText={formik.touched.salary && formik.errors.salary}
+              InputProps={{
+                endAdornment: <InputAdornment position="end">{STATIC_DATA.DEFAULT_CURRENCY_NAME}</InputAdornment>,
+              }}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <MyTextFailed
+              fullWidth
+              id="one_day_vacation_discount"
+              name="one_day_vacation_discount"
+              label="قيمة خصم الغياب ليوم واحد"
+              value={formik.values.one_day_vacation_discount}
+              onChange={formik.handleChange}
+              error={formik.touched.one_day_vacation_discount && Boolean(formik.errors.one_day_vacation_discount)}
+              helperText={formik.touched.salary && formik.errors.one_day_vacation_discount}
               InputProps={{
                 endAdornment: <InputAdornment position="end">{STATIC_DATA.DEFAULT_CURRENCY_NAME}</InputAdornment>,
               }}
