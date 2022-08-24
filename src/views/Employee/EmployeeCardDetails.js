@@ -30,7 +30,7 @@ const EmployeeCardDetails = ({ employee }) => {
         style={{ color: '#2065D1' }}
       />
       <CardContent>
-        <Grid container direction="row-reverse" justifyContent="center" alignItems="center" spacing={1}>
+        <Grid container direction="row-reverse" justifyContent="flex-start" alignItems="center" spacing={1}>
           <Grid item xs={12} sm={6}>
             <RowGrid
               children={
@@ -82,6 +82,24 @@ const EmployeeCardDetails = ({ employee }) => {
                   </Grid>
                   <Grid item>
                     <Iconify icon="noto-v1:birthday-cake" style={{ fontSize: '36px' }} />
+                  </Grid>
+                </>
+              }
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <RowGrid
+              children={
+                <>
+                  <Grid item>
+                    {convertDateToFormatDate(employee?.joining_date) ? (
+                      convertDateToFormatDate(employee?.joining_date)
+                    ) : (
+                      <>غير محدد</>
+                    )}
+                  </Grid>
+                  <Grid item>
+                    <Iconify icon="gis:flag-start-b" style={{ fontSize: '36px' }} />
                   </Grid>
                 </>
               }

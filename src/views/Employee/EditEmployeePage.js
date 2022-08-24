@@ -24,6 +24,7 @@ const EditEmployeePage = () => {
     name: employee?.name,
     phone_number: employee?.phone_number,
     birthday: employee?.birthday,
+    joining_date: employee?.joining_date,
     salary: employee?.salary,
     position: employee?.position,
     in_working: employee?.in_working,

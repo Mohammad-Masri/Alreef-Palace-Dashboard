@@ -101,6 +101,19 @@ const EmployeeForm = ({ initialValues, onSubmit, isEdit }) => {
             />
           </Grid>
           <Grid item xs={12} sm={6}>
+            <MyTextFailed
+              fullWidth
+              id="joining_date"
+              name="joining_date"
+              label="تاريخ الانضمام"
+              value={formik.values.joining_date}
+              onChange={formik.handleChange}
+              error={formik.touched.joining_date && Boolean(formik.errors.joining_date)}
+              helperText={formik.touched.joining_date && formik.errors.joining_date}
+              type="date"
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
             <MySwitch
               label="حالة العمل"
               id="in_working"

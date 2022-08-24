@@ -15,6 +15,7 @@ const CreateNewEmployeePage = () => {
     name: '',
     phone_number: '',
     birthday: '',
+    joining_date: '',
     salary: '',
     position: '',
     in_working: true,

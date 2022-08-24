@@ -151,6 +151,15 @@ const AllEmployeesPage = () => {
       },
     },
     {
+      id: 'joining_date',
+      label: 'تاريخ الانضمام',
+      minWidth: 200,
+      align: 'center',
+      renderComponent: (employee) => {
+        return convertDateToFormatDate(employee.joining_date);
+      },
+    },
+    {
       id: 'actions',
       label: '',
       minWidth: 200,
