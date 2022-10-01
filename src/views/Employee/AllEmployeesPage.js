@@ -1,3 +1,4 @@
+/* eslint-disable arrow-body-style */
 import { Container, Stack, Typography, Button, Avatar, Chip, Grid } from '@mui/material';
 
 import React, { useEffect, useState } from 'react';
@@ -43,8 +44,8 @@ const AllEmployeesPage = () => {
     navigate('/dashboard/employee/show/' + employee_id, { replace: true });
   };
 
-  const handelClickShowEmployeePayments = (employee_id) => {
-    navigate(`/dashboard/employee/${employee_id}/employee-payment`, { replace: true });
+  const handelClickShowFinancialReport = (employee_id) => {
+    navigate(`/dashboard/employee/${employee_id}/financial-report`, { replace: true });
   };
 
   const columns = [
@@ -188,8 +189,8 @@ const AllEmployeesPage = () => {
             objectId={employee.id}
             showOption={1}
             handleClickShow={handelClickShowEmployee}
-            showPaymentsOption={1}
-            handleClickShowPayments={handelClickShowEmployeePayments}
+            showFinancialReport={1}
+            handleClickShowFinancialReport={handelClickShowFinancialReport}
             deleteOption={1}
             handleClickDelete={handelClickDeleteEmployee}
             editOption={1}

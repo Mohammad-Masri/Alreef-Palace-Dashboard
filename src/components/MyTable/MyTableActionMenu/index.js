@@ -11,8 +11,8 @@ export default function MyTableActionMenu({
   objectId,
   showOption,
   handleClickShow,
-  showPaymentsOption,
-  handleClickShowPayments,
+  showFinancialReport,
+  handleClickShowFinancialReport,
   deleteOption,
   handleClickDelete,
   editOption,
@@ -53,17 +53,17 @@ export default function MyTableActionMenu({
           <></>
         )}
 
-        {showPaymentsOption == true ? (
+        {showFinancialReport == true ? (
           <MenuItem
             sx={{ color: 'text.secondary' }}
             onClick={() => {
-              handleClickShowPayments(objectId);
+              handleClickShowFinancialReport(objectId);
             }}
           >
             <ListItemIcon>
-              <Iconify icon="ant-design:history-outlined" width={24} height={24} />
+              <Iconify icon="tabler:report-money" width={24} height={24} />
             </ListItemIcon>
-            <ListItemText primary="عرض سجل الدفعات" primaryTypographyProps={{ variant: 'body2' }} />
+            <ListItemText primary="عرض السجل المالي" primaryTypographyProps={{ variant: 'body2' }} />
           </MenuItem>
         ) : (
           <></>

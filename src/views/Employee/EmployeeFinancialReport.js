@@ -1,3 +1,5 @@
+/* eslint-disable prefer-destructuring */
+/* eslint-disable arrow-body-style */
 import { Stack, Container, Typography, Grid, Chip, Card, CardHeader, CardContent, Button } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,31 +14,31 @@ import {
   convertDateToFormatDate,
   convertDateToFormatDateAndTime,
   getEndTimeOfThisDay,
-  getFirstDayOfThisMonth,
-  getLastDayOfThisMonth,
-  getNowMonthHelper,
   getStartTimeOfThisDay,
 } from 'src/helper/moment';
 import { checkIfThisStringFoundInAnotherString } from 'src/helper/string';
 import { STATIC_DATA } from 'src/server/static-data';
-import { deleteEmployeePayment, fetchEmployeePayments } from 'src/store/EmployeePayment/actions';
 import MyTableActionMenu from 'src/components/MyTable/MyTableActionMenu';
 import { showSuccessSnackbarMessage } from 'src/helper/snackbar';
-import EmployeeCardDetails from '../EmployeeCardDetails';
+import {
+  deleteEmployeePayment,
+  deleteEmployeeVacation,
+  fetchEmployeeFinancialReport,
+} from 'src/store/Employee/actions';
+import EmployeeCardDetails from './EmployeeCardDetails';
 
-const AllEmployeePayments = () => {
+const EmployeeFinancialReport = () => {
   const params = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { loading, employee_payments, employee, net_account, from_date, to_date } = useSelector(
-    (state) => state.employee_payment
-  );
+  const { loading, financial_report } = useSelector((state) => state.employee);
 
-  // const now_month = getNowMonthHelper();
-  // const first_day_of_month = getFirstDayOfThisMonth(now_month);
-  // const last_day_of_month = getLastDayOfThisMonth(now_month);
-  // const first_time_of_day = getStartTimeOfThisDay(first_day_of_month);
-  // const last_time_of_day = getEndTimeOfThisDay(last_day_of_month);
+  const employee_payments = financial_report?.employee_payments;
+  const employee_vacations = financial_report?.employee_vacations;
+  const employee = financial_report?.employee;
+  const net_account = financial_report?.net_account;
+  const from_date = financial_report?.from_date;
+  const to_date = financial_report?.to_date;
 
   const [startDay, setStartDay] = useState(from_date);
   const [endDay, setEndDay] = useState(to_date);
@@ -45,7 +47,7 @@ const AllEmployeePayments = () => {
     const employee_id = params.employee_id;
     const from_date = startDay;
     const to_date = endDay;
-    dispatch(fetchEmployeePayments(employee_id, from_date, to_date));
+    dispatch(fetchEmployeeFinancialReport(employee_id, from_date, to_date));
   }, []);
 
   const handleStartDayChange = (event) => {
@@ -57,7 +59,7 @@ const AllEmployeePayments = () => {
     const employee_id = params.employee_id;
     const from_date = first_time_of_day;
     const to_date = endDay;
-    dispatch(fetchEmployeePayments(employee_id, from_date, to_date));
+    dispatch(fetchEmployeeFinancialReport(employee_id, from_date, to_date));
   };
 
   const handleEndDayChange = (event) => {
@@ -68,7 +70,7 @@ const AllEmployeePayments = () => {
     const employee_id = params.employee_id;
     const from_date = startDay;
     const to_date = last_time_of_day;
-    dispatch(fetchEmployeePayments(employee_id, from_date, to_date));
+    dispatch(fetchEmployeeFinancialReport(employee_id, from_date, to_date));
   };
 
   const handelClickDeleteEmployeePayment = (employee_payment_id) => {
@@ -79,12 +81,9 @@ const AllEmployeePayments = () => {
     const result = window.confirm('هل تريد فعلا حذف هذه الدفعة ؟');
     const from_date = startDay;
     const to_date = endDay;
-    console.log('from_date : ', from_date);
-    console.log('typeof from_date : ', typeof from_date);
-    console.log('to_date : ', to_date);
-    console.log('typeof to_date : ', typeof to_date);
+
     if (result) {
-      dispatch(deleteEmployeePayment(employee_payment_id, from_date, to_date));
+      dispatch(deleteEmployeePayment(employee_payment_id, from_date, to_date, onDeleteSuccess));
     }
   };
   const handelClickEditEmployeePayment = (employee_payment_id) => {
@@ -93,7 +92,26 @@ const AllEmployeePayments = () => {
     });
   };
 
-  const columns = [
+  const handelClickDeleteEmployeeVacation = (employee_vacation_id) => {
+    const onDeleteSuccess = () => {
+      showSuccessSnackbarMessage('تم حذف الإجازة بنجاح');
+    };
+
+    const result = window.confirm('هل تريد فعلا حذف هذه الإجازة ؟');
+    const from_date = startDay;
+    const to_date = endDay;
+
+    if (result) {
+      dispatch(deleteEmployeeVacation(employee_vacation_id, from_date, to_date, onDeleteSuccess));
+    }
+  };
+  const handelClickEditEmployeeVacation = (employee_vacation_id) => {
+    navigate(`/dashboard/employee/${params.employee_id}/employee-vacation/edit/${employee_vacation_id}`, {
+      replace: true,
+    });
+  };
+
+  const employee_payment_columns = [
     {
       id: 'id',
       label: 'المعرف',
@@ -200,21 +218,105 @@ const AllEmployeePayments = () => {
     },
   ];
 
-  const [searchTextValue, setSearchTextValue] = useState('');
-  const handleSearchTextValueChange = (event) => {
-    setSearchTextValue(event.target.value);
+  const employee_vacation_columns = [
+    {
+      id: 'id',
+      label: 'المعرف',
+      minWidth: 200,
+      align: 'center',
+      renderComponent: (employee_vacation) => {
+        return employee_vacation.id;
+      },
+    },
+    {
+      id: 'reason',
+      label: 'السبب',
+      minWidth: 300,
+      align: 'center',
+      renderComponent: (employee_vacation) => {
+        return employee_vacation.reason;
+      },
+    },
+    {
+      id: 'discount_value',
+      label: 'المبلغ',
+      minWidth: 200,
+      align: 'center',
+      renderComponent: (employee_vacation) => {
+        return (
+          <RowGrid
+            children={
+              <>
+                <Grid item>{STATIC_DATA.DEFAULT_CURRENCY_NAME}</Grid>
+                <Grid item>{employee_vacation.discount_value}</Grid>
+              </>
+            }
+          />
+        );
+      },
+    },
+
+    {
+      id: 'date',
+      label: 'تاريخ الإجازة',
+      minWidth: 200,
+      align: 'center',
+      renderComponent: (employee_vacation) => {
+        return convertDateToFormatDate(employee_vacation.date);
+      },
+    },
+    {
+      id: 'created_at',
+      label: 'تاريخ تسجيل الاجازة',
+      minWidth: 200,
+      align: 'center',
+      renderComponent: (employee_vacation) => {
+        return convertDateToFormatDateAndTime(employee_vacation.created_at);
+      },
+    },
+    {
+      id: 'actions',
+      label: '',
+      minWidth: 200,
+      align: 'center',
+      renderComponent: (employee_vacation) => {
+        return (
+          <MyTableActionMenu
+            objectId={employee_vacation.id}
+            showOption={0}
+            handleClickShow={null}
+            showPaymentsOption={0}
+            handleClickShowPayments={null}
+            deleteOption={1}
+            handleClickDelete={handelClickDeleteEmployeeVacation}
+            editOption={1}
+            handleClickEdit={handelClickEditEmployeeVacation}
+          />
+        );
+      },
+    },
+  ];
+
+  const [searchTextValueEmployeePayment, setSearchTextValueEmployeePayment] = useState('');
+  const handleSearchTextValueEmployeePaymentChange = (event) => {
+    setSearchTextValueEmployeePayment(event.target.value);
+  };
+
+  const [searchTextValueEmployeeVacation, setSearchTextValueEmployeeVacation] = useState('');
+  const handleSearchTextValueEmployeeVacationChange = (event) => {
+    setSearchTextValueEmployeeVacation(event.target.value);
   };
 
   let filtered_employee_payments = employee_payments;
-  if (searchTextValue != '' && searchTextValue != null) {
+  if (searchTextValueEmployeePayment != '' && searchTextValueEmployeePayment != null) {
     filtered_employee_payments = employee_payments.filter((employee_payment) => {
       let match = false;
       if (
-        checkIfThisStringFoundInAnotherString(employee_payment.id, searchTextValue) ||
-        checkIfThisStringFoundInAnotherString(employee_payment.description, searchTextValue) ||
-        checkIfThisStringFoundInAnotherString(employee_payment.amount, searchTextValue) ||
-        checkIfThisStringFoundInAnotherString(employee_payment.date, searchTextValue) ||
-        checkIfThisStringFoundInAnotherString(employee_payment.created_at, searchTextValue)
+        checkIfThisStringFoundInAnotherString(employee_payment.id, searchTextValueEmployeePayment) ||
+        checkIfThisStringFoundInAnotherString(employee_payment.description, searchTextValueEmployeePayment) ||
+        checkIfThisStringFoundInAnotherString(employee_payment.amount, searchTextValueEmployeePayment) ||
+        checkIfThisStringFoundInAnotherString(employee_payment.date, searchTextValueEmployeePayment) ||
+        checkIfThisStringFoundInAnotherString(employee_payment.created_at, searchTextValueEmployeePayment)
       ) {
         match = true;
       }
@@ -222,27 +324,64 @@ const AllEmployeePayments = () => {
       return match;
     });
   }
-
   const is_employee_payments_not_found = filtered_employee_payments?.length === 0;
 
-  return (
-    <Page title="تفاصيل دفعات الموظف">
-      <Container>
-        <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-          <Button
-            variant="contained"
-            component={RouterLink}
-            to={`/dashboard/employee/${params.employee_id}/employee-payment/create`}
-            startIcon={<Iconify icon="eva:plus-fill" />}
-          >
-            تسجيل دفعة جديدة
-          </Button>
-          <Typography variant="h4" gutterBottom>
-            تفاصيل دفعات الموظف
-          </Typography>
-        </Stack>
+  let filtered_employee_vacations = employee_vacations;
+  if (searchTextValueEmployeePayment != '' && searchTextValueEmployeePayment != null) {
+    filtered_employee_vacations = employee_vacations.filter((employee_vacation) => {
+      let match = false;
+      if (
+        checkIfThisStringFoundInAnotherString(employee_vacation.id, searchTextValueEmployeePayment) ||
+        checkIfThisStringFoundInAnotherString(employee_vacation.reason, searchTextValueEmployeePayment) ||
+        checkIfThisStringFoundInAnotherString(employee_vacation.discount_value, searchTextValueEmployeePayment) ||
+        checkIfThisStringFoundInAnotherString(employee_vacation.date, searchTextValueEmployeePayment) ||
+        checkIfThisStringFoundInAnotherString(employee_vacation.created_at, searchTextValueEmployeePayment)
+      ) {
+        match = true;
+      }
 
-        {loading ? <MyLoader /> : <EmployeeCardDetails employee={employee} />}
+      return match;
+    });
+  }
+  const is_employee_vacations_not_found = filtered_employee_vacations?.length === 0;
+
+  return (
+    <Page title="السجل المالي">
+      <Container>
+        <Grid container direction="row" justifyContent="center" alignItems="center" spacing={1}>
+          <Grid item xs={12}>
+            <Stack direction="row-reverse" justifyContent="flex-start" alignItems="center">
+              <Typography variant="h4" gutterBottom>
+                السجل المالي للموظف
+              </Typography>
+            </Stack>
+          </Grid>
+          <Grid item xs={12}>
+            <Stack direction="row" justifyContent="flex-start" alignItems="center" spacing={2}>
+              <Button
+                variant="contained"
+                component={RouterLink}
+                to={`/dashboard/employee/${params.employee_id}/employee-payment/create`}
+                startIcon={<Iconify icon="eva:plus-fill" />}
+              >
+                تسجيل دفعة جديدة
+              </Button>
+              <Button
+                variant="contained"
+                component={RouterLink}
+                to={`/dashboard/employee/${params.employee_id}/employee-vacation/create`}
+                startIcon={<Iconify icon="eva:plus-fill" />}
+              >
+                تسجيل إجازة جديدة
+              </Button>
+            </Stack>
+          </Grid>
+          <Grid item xs={12}>
+            <Stack direction="row" justifyContent="flex-start" alignItems="center" spacing={2}>
+              {loading ? <MyLoader /> : <EmployeeCardDetails employee={employee} />}
+            </Stack>
+          </Grid>
+        </Grid>
 
         <Grid container direction="row" justifyContent="center" alignItems="center" style={{ padding: 20 }} spacing={1}>
           <Grid item xs={6}>
@@ -274,13 +413,26 @@ const AllEmployeePayments = () => {
             <>
               <Grid item xs={12}>
                 <MyTable
-                  searchTextValue={searchTextValue}
-                  handleSearchTextValueChange={handleSearchTextValueChange}
+                  title="الدفعات"
+                  searchTextValue={searchTextValueEmployeePayment}
+                  handleSearchTextValueChange={handleSearchTextValueEmployeePaymentChange}
                   searchTextPlaceholder="البحث عن دفعة"
-                  columns={columns}
+                  columns={employee_payment_columns}
                   data={filtered_employee_payments}
                   isDataFound={is_employee_payments_not_found}
                   allDataCount={employee_payments?.length}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <MyTable
+                  title="الإجازات"
+                  searchTextValue={searchTextValueEmployeeVacation}
+                  handleSearchTextValueChange={handleSearchTextValueEmployeeVacationChange}
+                  searchTextPlaceholder="البحث عن إجازة"
+                  columns={employee_vacation_columns}
+                  data={filtered_employee_vacations}
+                  isDataFound={is_employee_vacations_not_found}
+                  allDataCount={employee_vacations?.length}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -360,4 +512,4 @@ const AllEmployeePayments = () => {
   );
 };
 
-export default AllEmployeePayments;
+export default EmployeeFinancialReport;

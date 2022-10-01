@@ -7,38 +7,37 @@ import MyLoader from 'src/components/MyLoader';
 import Page from 'src/components/Page';
 import { convertDateToFormatDate } from 'src/helper/moment';
 import { showSuccessSnackbarMessage } from 'src/helper/snackbar';
-import { fetchEmployeePayment, updateEmployeePayment } from 'src/store/Employee/actions';
-import EmployeePaymentForm from './EmployeePaymentForm';
+import { fetchEmployeeVacation, updateEmployeeVacation } from 'src/store/Employee/actions';
+import EmployeeVacationForm from './EmployeeVacationForm';
 
-const EditEmployeePaymentPage = () => {
+const EditEmployeeVacationPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { loading, employee_payment } = useSelector((state) => state.employee);
+  const { loading, employee_vacation } = useSelector((state) => state.employee);
   const { from_date, to_date } = useSelector((state) => state.employee.financial_report);
 
   const params = useParams();
 
   useEffect(() => {
-    const { employee_payment_id } = params;
-    dispatch(fetchEmployeePayment(employee_payment_id));
+    const { employee_vacation_id } = params;
+    dispatch(fetchEmployeeVacation(employee_vacation_id));
   }, [dispatch, params]);
 
   const initialValues = {
     employee_id: params.employee_id,
-    description: employee_payment.description,
-    amount: employee_payment.amount,
-    employee_payment_type_key: employee_payment?.type?.key,
-    date: convertDateToFormatDate(employee_payment.date),
+    reason: employee_vacation.reason,
+    discount_value: employee_vacation.discount_value,
+    date: convertDateToFormatDate(employee_vacation.date),
   };
 
   const onUpdateSuccess = () => {
     navigate(`/dashboard/employee/${params.employee_id}/financial-report`, { replace: true });
-    showSuccessSnackbarMessage('تم تعديل الدفعة بنجاح');
+    showSuccessSnackbarMessage('تم تعديل الإجازة بنجاح');
   };
 
   const onSubmit = (values) => {
     console.log(values);
-    dispatch(updateEmployeePayment(params.employee_payment_id, values, from_date, to_date, onUpdateSuccess));
+    dispatch(updateEmployeeVacation(params.employee_vacation_id, values, from_date, to_date, onUpdateSuccess));
   };
 
   return (
@@ -50,10 +49,10 @@ const EditEmployeePaymentPage = () => {
             تعديل الدفعة
           </Typography>
         </Stack>
-        {loading ? <MyLoader /> : <EmployeePaymentForm initialValues={initialValues} onSubmit={onSubmit} isEdit />}
+        {loading ? <MyLoader /> : <EmployeeVacationForm initialValues={initialValues} onSubmit={onSubmit} isEdit />}
       </Container>
     </Page>
   );
 };
 
-export default EditEmployeePaymentPage;
+export default EditEmployeeVacationPage;

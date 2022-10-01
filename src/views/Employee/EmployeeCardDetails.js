@@ -1,3 +1,5 @@
+/* eslint-disable arrow-body-style */
+/* eslint-disable react/prop-types */
 import { Button, Card, CardContent, CardHeader, Chip, Grid, Typography } from '@mui/material';
 import React from 'react';
 import Iconify from 'src/components/Iconify';
@@ -21,10 +23,10 @@ const EmployeeCardDetails = ({ employee }) => {
           <Button
             variant="text"
             component={RouterLink}
-            to={`/dashboard/employee/${employee?.id}/employee-payment`}
-            startIcon={<Iconify icon="ant-design:history-outlined" />}
+            to={`/dashboard/employee/${employee?.id}/financial-report`}
+            startIcon={<Iconify icon="tabler:report-money" />}
           >
-            عرض سجل الدفعات
+            عرض السجل المالي
           </Button>
         }
         style={{ color: '#2065D1' }}

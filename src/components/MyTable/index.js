@@ -8,6 +8,7 @@ import {
   TableRow,
   TableBody,
   TablePagination,
+  Typography,
 } from '@mui/material';
 import React, { useState } from 'react';
 import RowGrid from '../RowGrid';
@@ -16,6 +17,7 @@ import SearchTextInput from '../SearchTextInput';
 import MyTableNotFoundData from './MyTableNotFoundData';
 
 const MyTable = ({
+  title,
   searchTextValue,
   handleSearchTextValueChange,
   searchTextPlaceholder,
@@ -44,7 +46,10 @@ const MyTable = ({
         style={{ padding: 20 }}
         children={
           <>
-            <Grid item xs={12}>
+            <Grid item xs={6}>
+              <Typography variant="h5">{title}</Typography>
+            </Grid>
+            <Grid item xs={6}>
               <SearchTextInput
                 value={searchTextValue}
                 placeholder={searchTextPlaceholder}

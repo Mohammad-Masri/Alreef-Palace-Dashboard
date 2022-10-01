@@ -23,9 +23,18 @@ export const CREATE_EMPLOYEE_END_POINT = `${SERVER_BASE_URL}/api/v1/employee`;
 export const FETCH_EMPLOYEE_END_POINT = `${SERVER_BASE_URL}/api/v1/employee/`;
 export const UPDATE_EMPLOYEE_END_POINT = `${SERVER_BASE_URL}/api/v1/employee/`;
 
+export const FETCH_EMPLOYEE_FINANCIAL_REPORT_END_POINT = `${SERVER_BASE_URL}/api/v1/employee/financial-report/`;
+
 // Employee Payment
 export const FETCH_ALL_EMPLOYEE_PAYMENT_END_POINT = `${SERVER_BASE_URL}/api/v1/employee/employee-payment/get-all/`;
 export const DELETE_EMPLOYEE_PAYMENT_END_POINT = `${SERVER_BASE_URL}/api/v1/employee/employee-payment/`;
 export const CREATE_EMPLOYEE_PAYMENT_END_POINT = `${SERVER_BASE_URL}/api/v1/employee/employee-payment`;
 export const FETCH_EMPLOYEE_PAYMENT_END_POINT = `${SERVER_BASE_URL}/api/v1/employee/employee-payment/`;
 export const UPDATE_EMPLOYEE_PAYMENT_END_POINT = `${SERVER_BASE_URL}/api/v1/employee/employee-payment/`;
+
+// Employee Vacation
+export const FETCH_ALL_EMPLOYEE_VACATION_END_POINT = `${SERVER_BASE_URL}/api/v1/employee/employee-vacation/get-all/`;
+export const DELETE_EMPLOYEE_VACATION_END_POINT = `${SERVER_BASE_URL}/api/v1/employee/employee-vacation/`;
+export const CREATE_EMPLOYEE_VACATION_END_POINT = `${SERVER_BASE_URL}/api/v1/employee/employee-vacation`;
+export const FETCH_EMPLOYEE_VACATION_END_POINT = `${SERVER_BASE_URL}/api/v1/employee/employee-vacation/`;
+export const UPDATE_EMPLOYEE_VACATION_END_POINT = `${SERVER_BASE_URL}/api/v1/employee/employee-vacation/`;
